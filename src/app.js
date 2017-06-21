@@ -4,6 +4,9 @@ import {
     Route
 } from 'react-router-dom';
 import Layout from 'layout/Layout';
+
+require('semantic/dist/semantic.min.css');
+require('semantic/dist/semantic.min.js');
 ReactDOM.render(
     <Router>
         <Route path="/" component={Layout}/>

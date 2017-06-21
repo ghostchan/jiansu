@@ -1,6 +1,28 @@
-
+import {Link,NavLink} from 'react-router-dom';
+import S from './style.scss';
 export default function Nav() {
         return (
-            <div>Nav.js</div>
+            <div className={`ui fixed secondary pointing menu ${S.nav}`}>
+               <Link to="/" className={'header item'}>Noods</Link>
+
+                <NavLink exact to="/" className={'item'} activeClassName="active">首页</NavLink>
+
+                <div className="menu right">
+                    <NavLink to="/sigin_in"
+                    className={'item'}
+                    activeClassName="active"
+                    >登录</NavLink>
+
+                    <NavLink to="/sigin_up"
+                    className={'item'}
+                    activeClassName="active"
+                    >注册</NavLink>
+
+                    <NavLink to="/write"
+                    className={'item'}
+                    activeClassName="active"
+                    >写文章</NavLink>
+                </div>
+            </div>
         );
 }
