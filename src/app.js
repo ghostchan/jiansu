@@ -1,6 +1,13 @@
 
+import {
+    BrowserRouter as Router,
+    Route
+} from 'react-router-dom';
+import Layout from 'layout/Layout';
 ReactDOM.render(
-    <div>Hello</div>,
+    <Router>
+        <Route path="/" component={Layout}/>
+    </Router>,
     document.getElementById('root')
 );
 
