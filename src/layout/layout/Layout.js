@@ -1,4 +1,5 @@
 import Nav from 'nav/Nav';
+import S from './style.scss';
 export default class Layout extends React.Component{
     constructor(props){
         super(props);
@@ -6,7 +7,7 @@ export default class Layout extends React.Component{
 
     render(){
         return (
-            <div>
+            <div className={S.layout}>
                 <Nav/>
             </div>
         );
