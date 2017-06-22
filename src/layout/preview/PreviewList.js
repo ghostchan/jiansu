@@ -1,13 +1,11 @@
 import {Link} from 'react-router-dom';
 import Preview from './Preview';
 import S from './style.scss';
-
+import cfg from 'config/config.json'
 
 export default function PreviewList(props){
 
     let {previews} = props;
-
-    previews = [];
 
     previews = previews.map((elt, i)=>{
         let {
@@ -20,7 +18,7 @@ export default function PreviewList(props){
         } = elt;
 
         let {avatar, user_name, user_intro} = user;
-        
+        avatar = cfg.url + avatar;
         return (
             <Preview
                 {...{

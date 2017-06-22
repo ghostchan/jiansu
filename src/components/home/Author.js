@@ -1,7 +1,8 @@
 import {Link} from 'react-router-dom';
-
+import cfg from 'config/config.json';
 export default function Author({user}){
     let {user_name, avatar} = user;
+    avatar = cfg.url + avatar;
     return (
         <div className="item">
             <Link
