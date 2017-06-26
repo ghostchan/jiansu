@@ -8,12 +8,11 @@ export default function Nav() {
                 <NavLink exact to="/" className={'item'} activeClassName="active">首页</NavLink>
 
                 <div className="menu right">
-                    <NavLink to="/sigin_in"
+                    <NavLink to="/sign_in"
                     className={'item'}
                     activeClassName="active"
                     >登录</NavLink>
-
-                    <NavLink to="/sigin_up"
+                    <NavLink to="/sign_up"
                     className={'item'}
                     activeClassName="active"
                     >注册</NavLink>
