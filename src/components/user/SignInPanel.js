@@ -3,6 +3,11 @@ import Panel from './Panel';
 import S from './style.scss';
 import Validation from 'util/validation';
 
+let propTypes = {
+    signInAjax: PT.func,
+    signInMsg:PT.object
+}
+
 export default class SignInPanel extends Component{
 
     constructor(props){
@@ -26,6 +31,7 @@ export default class SignInPanel extends Component{
         ]);
         this.nameChange = this.nameChange.bind(this);
         this.passwChange = this.passwChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
     nameChange(ev){
         let {target} = ev;
@@ -44,10 +50,37 @@ export default class SignInPanel extends Component{
             passwErr:msg
         });
     }
+    onSubmit(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+        let {validator} =this;
+        let {nameDom,passwDom} = this.refs;
+        let nameErr = this.validator.valiOneByValue('username',nameDom.value);
+        let passwErr = this.validator.valiOneByValue('passw',passwDom.value);
+        this.setState({
+            nameErr,passwErr
+        });
 
+        if(!nameErr && !passwErr){
+            this.props.signInAjax({
+                username:nameDom.value,
+                passw:passwDom.value
+            });
+        }
+    }
     render(){
-        let {nameChange,passwChange} = this;
+        let {nameChange,passwChange,onSubmit} = this;
         let {username,passw,nameErr,passwErr} = this.state;
+        let {signInMsg} = this.props;
+        let resInfo = null;
+
+        if(signInMsg && signInMsg.code !== 0){
+            resInfo = (
+                <div className="ui message error">
+                    <p>{signInMsg.msg}</p>
+                </div>
+            );
+        }
         let nameErrMsg = nameErr ? (
             <p className={S.err}>{nameErr}</p>
         ) : null;
@@ -57,8 +90,10 @@ export default class SignInPanel extends Component{
         ) : null;
         return (
             <div className={S.sign_panel}>
+                {resInfo}
                 <form
                     className="ui form"
+                    onSubmit={onSubmit}
                 >
                     <div className={`field ${nameErr ? 'error' :''}`}>
                         <input
