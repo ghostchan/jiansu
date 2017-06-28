@@ -1,4 +1,4 @@
-import {Route} from 'react-router-dom';
+import {Route,Redirect} from 'react-router-dom';
 import Nav from 'nav/Nav';
 import Home from 'view/home/Home.js';
 import SignUp from 'view/user/SignUp';
@@ -67,24 +67,33 @@ export default class Layout extends React.Component{
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/sign_in" render={
                     (props)=>(
-                        <SignIn
-                            {...{
-                                signInAjax,
-                                signInMsg,
-                                clearLoginMsg
-                            }}
-                        />
+                        myInfo ? (
+                            <Redirect to="/"/>
+                        ) : (
+                            <SignIn
+                                {...{
+                                    signInAjax,
+                                    signInMsg,
+                                    clearLoginMsg
+                                }}
+                            />
+                            )
+
                     )
                 }/>
                 <Route exact path="/sign_up" render={
                     (props)=>(
-                        <SignUp
-                            {...{
-                                signUpAjax,
-                                signUpMsg,
-                                clearLoginMsg
-                            }}
-                        />
+                        myInfo ? (
+                            <Redirect to="/"/>
+                        ) : (
+                                <SignUp
+                                    {...{
+                                        signUpAjax,
+                                        signUpMsg,
+                                        clearLoginMsg
+                                    }}
+                                />
+                            )
                     )
                 }/>
             </div>
