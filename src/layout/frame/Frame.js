@@ -11,9 +11,11 @@ export default class Layout extends React.Component{
         super(props);
         this.state = {
             myInfo: null,
-            signInMsg: null
+            signInMsg: null,
+            signUpMsg: null
         };
         this.signInAjax = this.signInAjax.bind(this);
+        this.signUpAjax = this.signUpAjax.bind(this);
     }
 
     signInAjax(reqData){
@@ -27,9 +29,17 @@ export default class Layout extends React.Component{
         });
     }
 
+    signUpAjax(reqData){
+        $.post(`${cfg.url}/register`,reqData)
+            .done((ret)=>{
+                let {code,data} = ret;
+                this.setState({signUpMsg:ret});
+            });
+    }
+
     render(){
-        let {signInAjax} = this;
-        let {signInMsg} = this.state;
+        let {signInAjax,signUpAjax} = this;
+        let {signInMsg,signUpMsg} = this.state;
         return (
             <div className={S.layout}>
                 <Nav/>
@@ -44,7 +54,16 @@ export default class Layout extends React.Component{
                         />
                     )
                 }/>
-                <Route exact path="/sign_up" component={SignUp}/>
+                <Route exact path="/sign_up" render={
+                    (props)=>(
+                        <SignUp
+                            {...{
+                                signUpAjax,
+                                signUpMsg
+                            }}
+                        />
+                    )
+                }/>
             </div>
         );
     }

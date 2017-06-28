@@ -2,7 +2,10 @@ import React , {Component} from 'react';
 import Panel from './Panel';
 import S from './style.scss';
 import Validation from 'util/validation';
-
+let propTypes = {
+    signUpAjax:PT.func,
+    signUpMsg:PT.object
+};
 export default class SignUpPanel extends Component{
 
     constructor(props){
@@ -29,6 +32,7 @@ export default class SignUpPanel extends Component{
         this.nameChange = this.nameChange.bind(this);
         this.passwChange = this.passwChange.bind(this);
         this.cfPasswChange = this.cfPasswChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
 
     }
     nameChange(ev){
@@ -61,9 +65,51 @@ export default class SignUpPanel extends Component{
         });
     }
 
+    onSubmit(ev){
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        let {validator} = this;
+        let {username,passw,cfPassw} = this.state;
+        let nameErr = this.validator.valiOneByValue('username',username);
+        let passwErr = this.validator.valiOneByValue('passw',passw);
+        let cfPasswErr = passw === cfPassw ? '':'密码不一致';
+
+        this.setState({
+            nameErr,
+            passwErr,
+            cfPasswErr
+        });
+
+        if(!nameErr && !passwErr && !cfPasswErr){
+            this.props.signUpAjax({
+                username,passw,cfPassw
+            });
+        }
+    }
+
     render(){
-        let {nameChange,passwChange,cfPasswChange} = this;
+        let {nameChange,passwChange,cfPasswChange,onSubmit} = this;
         let {username,passw,cfPassw,nameErr,passwErr,cfPasswErr} = this.state;
+        let {signUpMsg} = this.props;
+
+        let resInfo = null;
+        if(signUpMsg){
+            if(signUpMsg.code === 0){
+                resInfo = (
+                    <div className="ui message positive">
+                        <p>{signUpMsg.msg}</p>
+                        <p>马上帮你登录</p>
+                    </div>
+                );
+            }else{
+                resInfo = (
+                    <div className="ui message error">
+                        <p>{signUpMsg.msg}</p>
+                    </div>
+                );
+            }
+        }
         let nameErrMsg = nameErr ? (
             <p className={S.err}>{nameErr}</p>
         ) : null;
@@ -72,8 +118,10 @@ export default class SignUpPanel extends Component{
         ) : null;
         return (
             <div className={S.sign_panel}>
+                {resInfo}
                 <form
                     className="ui form"
+                    onSubmit={onSubmit}
                 >
                     <div className={`field ${nameErr ? 'error' :''}`}>
                         <input
@@ -115,3 +163,5 @@ export default class SignUpPanel extends Component{
         );
     }
 }
+
+SignUpPanel.propTypes = propTypes;
