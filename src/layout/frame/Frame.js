@@ -16,8 +16,15 @@ export default class Layout extends React.Component{
         };
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
+        this.clearLoginMsg = this.clearLoginMsg.bind(this);
     }
 
+    clearLoginMsg(){
+        this.setState({
+            signInMsg: null,
+            signUpMsg: null
+        });
+    }
     signInAjax(reqData){
         $.post(`${cfg.url}/login`,reqData).done(ret=>{
             let {code,data} = ret;
@@ -38,7 +45,7 @@ export default class Layout extends React.Component{
     }
 
     render(){
-        let {signInAjax,signUpAjax} = this;
+        let {signInAjax,signUpAjax,clearLoginMsg} = this;
         let {signInMsg,signUpMsg} = this.state;
         return (
             <div className={S.layout}>
@@ -49,7 +56,8 @@ export default class Layout extends React.Component{
                         <SignIn
                             {...{
                                 signInAjax,
-                                signInMsg
+                                signInMsg,
+                                clearLoginMsg
                             }}
                         />
                     )
@@ -59,7 +67,8 @@ export default class Layout extends React.Component{
                         <SignUp
                             {...{
                                 signUpAjax,
-                                signUpMsg
+                                signUpMsg,
+                                clearLoginMsg
                             }}
                         />
                     )
