@@ -112,8 +112,8 @@ export default class Layout extends React.Component{
     }
 
     render(){
-        let {signInAjax,signUpAjax,clearLoginMsg,logOut} = this;
-        let {signInMsg,signUpMsg,myInfo,hasLoginReq} = this.state;
+        let {signInAjax,signUpAjax,clearLoginMsg,logOut,initMyPage} = this;
+        let {signInMsg,signUpMsg,myInfo,hasLoginReq,myPagePreviews,notebooks,previewsName} = this.state;
         if(!hasLoginReq){
             return (<div></div>);
         }
@@ -125,7 +125,16 @@ export default class Layout extends React.Component{
                         logOut
                     }}
                 />
-                <Route exact path="/" component={Home}/>
+                <Route exact path="/" render={
+                    (props)=>(
+                        <Home
+                            {...{
+                                initMyPage
+                            }}
+                            {...props}
+                        />
+                    )
+                }/>
                 <Route exact path="/sign_in" render={
                     (props)=>(
                         myInfo ? (
@@ -159,7 +168,14 @@ export default class Layout extends React.Component{
                 }/>
                 <Route exact path="/my_page" render={
                     (props)=>(
-                        <MyPage/>
+                        <MyPage
+                            {...{
+                                myPagePreviews,
+                                previewsName,
+                                notebooks
+                            }}
+                            {...props}
+                        />
                     )
                 }/>
             </div>

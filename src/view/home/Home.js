@@ -4,6 +4,9 @@ import Recommend from 'components/home/Recommend';
 
 import cfg from 'config/config.json';
 
+let propTypes = {
+    initMyPage:PT.func
+};
 export default class Home extends React.Component{
     constructor(props){
         super(props);
@@ -35,12 +38,14 @@ export default class Home extends React.Component{
 
     render(){
         let {previews,authors} = this.state;
+        let {initMyPage,history} = this.props;
         return (
             <div className="ui container grid">
                 <div className="column twelve wide">
                     <PreviewList
                         {...{
-                            previews
+                            previews,
+                            initMyPage
                         }}
                     />
                 </div>
@@ -55,3 +60,4 @@ export default class Home extends React.Component{
         );
     }
 }
+Home.propTypes = propTypes;
