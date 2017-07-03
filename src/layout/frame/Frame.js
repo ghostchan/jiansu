@@ -12,7 +12,8 @@ export default class Layout extends React.Component{
         this.state = {
             myInfo: null,
             signInMsg: null,
-            signUpMsg: null
+            signUpMsg: null,
+            hasLoginReq: false
         };
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
@@ -54,9 +55,22 @@ export default class Layout extends React.Component{
             });
     }
 
+    componentDidMount(){
+        $.post(`${cfg.url}/autologin`)
+            .done(({code,data})=>{
+              if(code===0){
+                  this.initMyInfo(data);
+              }
+              this.setState({hasLoginReq:true});
+        });
+    }
+
     render(){
         let {signInAjax,signUpAjax,clearLoginMsg} = this;
-        let {signInMsg,signUpMsg,myInfo} = this.state;
+        let {signInMsg,signUpMsg,myInfo,hasLoginReq} = this.state;
+        if(!hasLoginReq){
+            return (<div></div>);
+        }
         return (
             <div className={S.layout}>
                 <Nav
