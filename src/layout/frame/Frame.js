@@ -13,13 +13,19 @@ export default class Layout extends React.Component{
             myInfo: null,
             signInMsg: null,
             signUpMsg: null,
-            hasLoginReq: false
+            hasLoginReq: false,
+            myPagePreviews: [],
+            notebooks:[],
+            previewsName: '所有文章'
         };
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
         this.clearLoginMsg = this.clearLoginMsg.bind(this);
         this.initMyInfo = this.initMyInfo.bind(this);
         this.logOut = this.logOut.bind(this);
+        this.getPreview = this.getPreview.bind(this);
+        this.initMyPage = this.initMyPage.bind(this);
+        this.changePreviewsName = this.changePreviewsName.bind(this);
     }
     initMyInfo(myInfo){
         if(myInfo){
@@ -64,6 +70,35 @@ export default class Layout extends React.Component{
                     this.initMyInfo(null);
                 }
             });
+    }
+
+    getPreview(data){
+        $.post(`${cfg.url}/getPreview`,data)
+            .done(({code,data})=>{
+                this.setState({
+                    myPagePreviews: data
+                });
+            });
+    }
+
+    initMyPage(user_id,previewsData,previewName){
+        this.getPreview(previewsData);
+
+        $.post(`${cfg.url}/getCollection`,{
+            user_id
+        })
+         .done(({code,data})=>{
+            if(code===0){
+                this.setState({
+                    notebooks: data,
+                    previewName
+                });
+            }
+         });
+    }
+
+    changePreviewsName(previewsName){
+        this.setState({previewsName});
     }
     componentDidMount(){
         $.post(`${cfg.url}/autologin`)
