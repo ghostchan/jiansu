@@ -1,11 +1,29 @@
 import S from './style.scss';
 
+let propTypes = {
+    notebooks:PT.array
+};
 export default class Aside extends React.Component{
     constructor(props){
         super(props);
     }
 
     render(){
+        let {notebooks} = this.props;
+        notebooks = notebooks.map((elt,i)=>{
+            let {id:collection_id,collection_name} = elt;
+            return (
+                <div
+                    className="item"
+                    key={i}
+                >
+                    <i className="book icon"></i>
+                    <div className="content">
+                        {collection_name}
+                    </div>
+                </div>
+            );
+        });
         return (
             <div className={$.aside}>
                 <div className="introduce">
@@ -23,10 +41,12 @@ export default class Aside extends React.Component{
                         我的文集
                     </div>
                     <div className="ui list">
-
+                        {notebooks}
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+Aside.propTypes = propTypes;

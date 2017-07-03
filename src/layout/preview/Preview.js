@@ -31,7 +31,7 @@ function Preview(props){
                                 ev.stopPropagation();
                                 ev.preventDefault();
                                 history.push('/my_page');
-                                initMyPage();
+                                initMyPage(user_id,{user_id},'所有文章');
                             }
                         }
                     >

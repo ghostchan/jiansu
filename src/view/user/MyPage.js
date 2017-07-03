@@ -32,7 +32,9 @@ export default class MyPage extends React.Component{
                 </div>
                 <div className="four wide column">
                     <Aside
-                        notebooks
+                        {...{
+                            notebooks
+                        }}
                     />
                 </div>
             </div>
