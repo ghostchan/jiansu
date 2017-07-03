@@ -3,6 +3,7 @@ import Nav from 'nav/Nav';
 import Home from 'view/home/Home.js';
 import SignUp from 'view/user/SignUp';
 import SignIn from 'view/user/SignIn';
+import MyPage from 'view/user/MyPage';
 import cfg from 'config/config.json';
 import S from './style.scss';
 
@@ -154,6 +155,11 @@ export default class Layout extends React.Component{
                                     }}
                                 />
                             )
+                    )
+                }/>
+                <Route exact path="/my_page" render={
+                    (props)=>(
+                        <MyPage/>
                     )
                 }/>
             </div>
