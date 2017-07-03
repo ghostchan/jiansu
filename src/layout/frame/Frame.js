@@ -19,9 +19,12 @@ export default class Layout extends React.Component{
         this.signUpAjax = this.signUpAjax.bind(this);
         this.clearLoginMsg = this.clearLoginMsg.bind(this);
         this.initMyInfo = this.initMyInfo.bind(this);
+        this.logOut = this.logOut.bind(this);
     }
     initMyInfo(myInfo){
-        myInfo.avatar = cfg.url + myInfo.avatar;
+        if(myInfo){
+            myInfo.avatar = cfg.url + myInfo.avatar;
+        }
         this.setState({myInfo});
     }
     clearLoginMsg(){
@@ -54,7 +57,14 @@ export default class Layout extends React.Component{
                 }
             });
     }
-
+    logOut(){
+        $.post(`${cfg.url}/logout`)
+            .done(({code})=>{
+                if(code===0){
+                    this.initMyInfo(null);
+                }
+            });
+    }
     componentDidMount(){
         $.post(`${cfg.url}/autologin`)
             .done(({code,data})=>{
@@ -66,7 +76,7 @@ export default class Layout extends React.Component{
     }
 
     render(){
-        let {signInAjax,signUpAjax,clearLoginMsg} = this;
+        let {signInAjax,signUpAjax,clearLoginMsg,logOut} = this;
         let {signInMsg,signUpMsg,myInfo,hasLoginReq} = this.state;
         if(!hasLoginReq){
             return (<div></div>);
@@ -75,7 +85,8 @@ export default class Layout extends React.Component{
             <div className={S.layout}>
                 <Nav
                     {...{
-                        myInfo
+                        myInfo,
+                        logOut
                     }}
                 />
                 <Route exact path="/" component={Home}/>
