@@ -14,11 +14,16 @@ export default class MyPage extends React.Component{
     }
 
     render(){
-        let {previewsName,notebooks,myPagePreviews} = this.props;
+        let {previewsName,notebooks,myPagePreviews,location} = this.props;
+        let {userInfo} = location.state;
         return (
             <div className="ui container grid">
                 <div className="twelve wide column">
-                    <AuthorInfo/>
+                    <AuthorInfo
+                        {...{
+                            userInfo
+                        }}
+                    />
                     <div className="ui secondary pointing menu">
                         <span className="active item">
                             {previewsName}
@@ -33,7 +38,8 @@ export default class MyPage extends React.Component{
                 <div className="four wide column">
                     <Aside
                         {...{
-                            notebooks
+                            notebooks,
+                            userInfo
                         }}
                     />
                 </div>

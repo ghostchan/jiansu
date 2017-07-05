@@ -1,7 +1,7 @@
 
 import {Link,withRouter} from 'react-router-dom';
 import S from './style.scss';
-
+import  cfg from 'config/config.json';
 function Preview(props){
 
     let {
@@ -16,9 +16,9 @@ function Preview(props){
         initMyPage,
         history
     } = props;
-
-    createdAt = new Date(createdAt).toLocaleString();
-
+    // avatar = cfg.url + avatar;
+    // createdAt = new Date(createdAt).toLocaleString();
+    createdAt = '今天';
     return (
         <div className={`${S.note}`}>
             <div className="ui divider hidden"></div>
@@ -30,7 +30,14 @@ function Preview(props){
                             ev=>{
                                 ev.stopPropagation();
                                 ev.preventDefault();
-                                history.push('/my_page');
+                                history.push('/my_page',{
+                                    userInfo:{
+                                        user_id,
+                                        user_name,
+                                        avatar,
+                                        user_intro
+                                    }
+                                });
                                 initMyPage(user_id,{user_id},'所有文章');
                             }
                         }

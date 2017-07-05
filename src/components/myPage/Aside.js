@@ -1,7 +1,8 @@
 import S from './style.scss';
 
 let propTypes = {
-    notebooks:PT.array
+    notebooks:PT.array,
+    userInfo:PT.object
 };
 export default class Aside extends React.Component{
     constructor(props){
@@ -9,7 +10,7 @@ export default class Aside extends React.Component{
     }
 
     render(){
-        let {notebooks} = this.props;
+        let {notebooks,userInfo} = this.props;
         notebooks = notebooks.map((elt,i)=>{
             let {id:collection_id,collection_name} = elt;
             return (
@@ -30,7 +31,7 @@ export default class Aside extends React.Component{
                     <div className="title">
                         个人介绍
                         <div className="ui divider hidden"></div>
-                        <p>个人介绍的信息</p>
+                        <p>{userInfo.user_intro}</p>
                     </div>
                 </div>
 
