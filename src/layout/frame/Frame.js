@@ -1,13 +1,17 @@
-import {Route,Redirect} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import Nav from 'nav/Nav';
 import Home from 'view/home/Home.js';
 import SignUp from 'view/user/SignUp';
 import SignIn from 'view/user/SignIn';
 import MyPage from 'view/user/MyPage';
+
 import cfg from 'config/config.json';
+
 import S from './style.scss';
 
-export default class Layout extends React.Component{
+
+
+export default class Frame extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -16,9 +20,10 @@ export default class Layout extends React.Component{
             signUpMsg: null,
             hasLoginReq: false,
             myPagePreviews: [],
-            notebooks:[],
+            notebooks: [],
             previewsName: '所有文章'
         };
+
         this.signInAjax = this.signInAjax.bind(this);
         this.signUpAjax = this.signUpAjax.bind(this);
         this.clearLoginMsg = this.clearLoginMsg.bind(this);
@@ -28,42 +33,67 @@ export default class Layout extends React.Component{
         this.initMyPage = this.initMyPage.bind(this);
         this.changePreviewsName = this.changePreviewsName.bind(this);
     }
+
     initMyInfo(myInfo){
+
+        let {id, avatar, username, user_intro} = myInfo;
+
         if(myInfo){
-            myInfo.avatar = cfg.url + myInfo.avatar;
+
+            avatar = cfg.url + avatar;
         }
-        this.setState({myInfo});
+
+
+        this.setState({myInfo:{
+            user_id: id,
+            avatar,
+            user_name: username,
+            user_intro
+
+        }});
     }
+
     clearLoginMsg(){
         this.setState({
             signInMsg: null,
             signUpMsg: null
         });
     }
+
     signInAjax(reqData){
-        $.post(`${cfg.url}/login`,reqData).done(ret=>{
-            let {code,data} = ret;
-            if(code === 0){
-                this.initMyInfo(ret.data);
-            }else{
-                this.setState({signInMsg:ret});
-            }
-        });
+        $.post(`${cfg.url}/login`, reqData)
+            .done(ret=>{
+
+                let {code, data} = ret;
+
+
+
+                if(code===0){
+                    this.initMyInfo(ret.data);
+                }else{
+                    this.setState({signInMsg: ret});
+                }
+
+            });
     }
 
     signUpAjax(reqData){
-        $.post(`${cfg.url}/register`,reqData)
+        $.post(`${cfg.url}/register`, reqData)
             .done((ret)=>{
-                let {code,data} = ret;
-                this.setState({signUpMsg:ret});
+                let {code, data} = ret;
 
-                if(code === 0){
+                this.setState({signUpMsg: ret});
+
+                if(code===0){
                     setTimeout(()=>{
                         this.initMyInfo(ret.data);
                     });
                 }
+
+
             });
     }
+
     logOut(){
         $.post(`${cfg.url}/logout`)
             .done(({code})=>{
@@ -75,66 +105,84 @@ export default class Layout extends React.Component{
 
     getPreview(data){
         $.post(`${cfg.url}/getPreview`,data)
-            .done(({code,data})=>{
-                this.setState({
-                    myPagePreviews: data
-                });
+            .done(({code, data})=>{
+                if(code===0){
+                    this.setState({
+                        myPagePreviews: data
+                    });
+                }
             });
     }
 
-    initMyPage(user_id,previewsData,previewsName){
+    // previewName 就是用户页头像下显示的那几个字
+    initMyPage(user_id, previewsData, previewsName){
         this.getPreview(previewsData);
 
         $.post(`${cfg.url}/getCollection`,{
             user_id
         })
-         .done(({code,data})=>{
-            if(code===0){
-                this.setState({
-                    notebooks: data,
-                    previewsName
-                });
-            }
-         });
+            .done(({code, data})=>{
+                if(code===0){
+                    this.setState({
+                        notebooks: data,
+                        previewsName
+                    });
+                }
+            });
+
     }
 
     changePreviewsName(previewsName){
         this.setState({previewsName});
     }
+
     componentDidMount(){
         $.post(`${cfg.url}/autologin`)
-            .done(({code,data})=>{
-              if(code===0){
-                  this.initMyInfo(data);
-              }
-              this.setState({hasLoginReq:true});
-        });
+            .done(({code, data})=>{
+                if(code===0){
+                    this.initMyInfo(data);
+                }
+                this.setState({hasLoginReq: true});
+            });
 
-        let {state,pathname} = this.props.location;
+        let {state, pathname} = this.props.location;
         if(state){
             let {user_id} = state.userInfo;
+
             if(pathname==='/my_page'){
-                this.initMyPage(user_id,{user_id},'所有文章');
+                this.initMyPage(user_id, {user_id}, '所有文章');
             }
+
+
+
         }
     }
 
+
     render(){
-        let {signInAjax,signUpAjax,clearLoginMsg,logOut,initMyPage} = this;
-        let {signInMsg,signUpMsg,myInfo,hasLoginReq,myPagePreviews,notebooks,previewsName} = this.state;
+
+        let {signInAjax, signUpAjax, clearLoginMsg, logOut, initMyPage} = this;
+
+        let {myInfo, signInMsg , signUpMsg, hasLoginReq, myPagePreviews, notebooks, previewsName} = this.state;
+
+        let {history} = this.props;
+
         if(!hasLoginReq){
             return (<div></div>);
         }
+
         return (
             <div className={S.layout}>
                 <Nav
                     {...{
                         myInfo,
-                        logOut
+                        logOut,
+                        initMyPage,
+                        history
                     }}
                 />
                 <Route exact path="/" render={
-                    (props)=>(
+                    (props)=> (
                         <Home
                             {...{
                                 initMyPage
@@ -143,6 +191,7 @@ export default class Layout extends React.Component{
                         />
                     )
                 }/>
+
                 <Route exact path="/sign_in" render={
                     (props)=>(
                         myInfo ? (
@@ -155,7 +204,7 @@ export default class Layout extends React.Component{
                                     clearLoginMsg
                                 }}
                             />
-                            )
+                        )
 
                     )
                 }/>
@@ -164,14 +213,15 @@ export default class Layout extends React.Component{
                         myInfo ? (
                             <Redirect to="/"/>
                         ) : (
-                                <SignUp
-                                    {...{
-                                        signUpAjax,
-                                        signUpMsg,
-                                        clearLoginMsg
-                                    }}
-                                />
-                            )
+                            <SignUp
+                                {...{
+                                    signUpAjax,
+                                    signUpMsg,
+                                    clearLoginMsg
+                                }}
+                            />
+                        )
+
                     )
                 }/>
                 <Route exact path="/my_page" render={
@@ -188,6 +238,7 @@ export default class Layout extends React.Component{
                         ) : (
                             <Redirect to="/"/>
                         )
+
 
                     )
                 }/>
