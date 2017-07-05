@@ -82,7 +82,7 @@ export default class Layout extends React.Component{
             });
     }
 
-    initMyPage(user_id,previewsData,previewName){
+    initMyPage(user_id,previewsData,previewsName){
         this.getPreview(previewsData);
 
         $.post(`${cfg.url}/getCollection`,{
@@ -92,7 +92,7 @@ export default class Layout extends React.Component{
             if(code===0){
                 this.setState({
                     notebooks: data,
-                    previewName
+                    previewsName
                 });
             }
          });
