@@ -10,7 +10,7 @@ let propTypes = {
 export default function Nav(props){
 
     let {myInfo, myInfo:{user_id},logOut, initMyPage, history} = props;
-
+    // console.log(myInfo);
     let userLink = null;
 
     if(myInfo){

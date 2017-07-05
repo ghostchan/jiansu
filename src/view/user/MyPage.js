@@ -13,15 +13,19 @@ export default class MyPage extends React.Component{
     constructor(props){
         super(props);
         this.collectionClick = this.collectionClick.bind(this);
+        this.notebookClick = this.notebookClick.bind(this);
     }
 
-    collectionClick(collection_id,collection_name,userInfo){
+    collectionClick(collection_id,collection_name){
         this.props.changePreviews({collection_id},collection_name);
+    }
+    notebookClick(collection_id,collection_name){
+        this.collectionClick(collection_id,collection_name);
     }
     render(){
         let {previewsName,notebooks,myPagePreviews,location} = this.props;
         let {userInfo} = location.state;
-        let {collectionClick} = this;
+        let {collectionClick,notebookClick} = this;
         return (
             <div className="ui container grid">
                 <div className="twelve wide column">
@@ -46,7 +50,8 @@ export default class MyPage extends React.Component{
                     <Aside
                         {...{
                             notebooks,
-                            userInfo
+                            userInfo,
+                            notebookClick
                         }}
                     />
                 </div>

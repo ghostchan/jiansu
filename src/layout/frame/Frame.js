@@ -168,7 +168,7 @@ export default class Frame extends React.Component{
         let {signInAjax, signUpAjax, clearLoginMsg, logOut, initMyPage,getPreview,changePreviews} = this;
 
         let {myInfo, signInMsg , signUpMsg, hasLoginReq, myPagePreviews, notebooks, previewsName} = this.state;
-
+        // console.log(myInfo);
         let {history} = this.props;
 
         if(!hasLoginReq){
