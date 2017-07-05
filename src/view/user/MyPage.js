@@ -6,7 +6,8 @@ let propTypes = {
     previewsName: PT.string,
     notebooks:PT.array,
     myPagePreviews:PT.array,
-    changePreviews:PT.func
+    changePreviews:PT.func,
+    initMyPage:PT.func
 }
 
 export default class MyPage extends React.Component{
@@ -23,7 +24,7 @@ export default class MyPage extends React.Component{
         this.collectionClick(collection_id,collection_name);
     }
     render(){
-        let {previewsName,notebooks,myPagePreviews,location} = this.props;
+        let {previewsName,notebooks,myPagePreviews,location,initMyPage} = this.props;
         let {userInfo} = location.state;
         let {collectionClick,notebookClick} = this;
         return (
@@ -31,7 +32,8 @@ export default class MyPage extends React.Component{
                 <div className="twelve wide column">
                     <AuthorInfo
                         {...{
-                            userInfo
+                            userInfo,
+                            initMyPage
                         }}
                     />
                     <div className="ui secondary pointing menu">
@@ -42,7 +44,8 @@ export default class MyPage extends React.Component{
                     <PreviewList
                         {...{
                             previews: myPagePreviews,
-                            collectionClick
+                            collectionClick,
+                            initMyPage
                         }}
                     />
                 </div>

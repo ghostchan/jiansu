@@ -236,7 +236,8 @@ export default class Frame extends React.Component{
                                     myPagePreviews,
                                     previewsName,
                                     notebooks,
-                                    changePreviews
+                                    changePreviews,
+                                    initMyPage
                                 }}
                                 {...props}
                             />
