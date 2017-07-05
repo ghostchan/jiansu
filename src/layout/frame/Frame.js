@@ -109,6 +109,14 @@ export default class Layout extends React.Component{
               }
               this.setState({hasLoginReq:true});
         });
+
+        let {state,pathname} = this.props.location;
+        if(state){
+            let {user_id} = state.userInfo;
+            if(pathname==='/my_page'){
+                this.initMyPage(user_id,{user_id},'所有文章');
+            }
+        }
     }
 
     render(){
@@ -168,14 +176,19 @@ export default class Layout extends React.Component{
                 }/>
                 <Route exact path="/my_page" render={
                     (props)=>(
-                        <MyPage
-                            {...{
-                                myPagePreviews,
-                                previewsName,
-                                notebooks
-                            }}
-                            {...props}
-                        />
+                        props.location.state ? (
+                            <MyPage
+                                {...{
+                                    myPagePreviews,
+                                    previewsName,
+                                    notebooks
+                                }}
+                                {...props}
+                            />
+                        ) : (
+                            <Redirect to="/"/>
+                        )
+
                     )
                 }/>
             </div>
