@@ -32,6 +32,7 @@ export default class Frame extends React.Component{
         this.getPreview = this.getPreview.bind(this);
         this.initMyPage = this.initMyPage.bind(this);
         this.changePreviewsName = this.changePreviewsName.bind(this);
+        this.changePreviews = this.changePreviews.bind(this);
     }
 
     initMyInfo(myInfo){
@@ -103,20 +104,24 @@ export default class Frame extends React.Component{
             });
     }
 
-    getPreview(data){
+    getPreview(data,previewsName){
         $.post(`${cfg.url}/getPreview`,data)
             .done(({code, data})=>{
                 if(code===0){
                     this.setState({
-                        myPagePreviews: data
+                        myPagePreviews: data,
+                        previewsName
                     });
                 }
             });
     }
 
+    changePreviews(data,previewsName){
+        this.getPreview(data,previewsName);
+    }
     // previewName 就是用户页头像下显示的那几个字
     initMyPage(user_id, previewsData, previewsName){
-        this.getPreview(previewsData);
+        this.getPreview(previewsData,previewsName);
 
         $.post(`${cfg.url}/getCollection`,{
             user_id
@@ -124,8 +129,7 @@ export default class Frame extends React.Component{
             .done(({code, data})=>{
                 if(code===0){
                     this.setState({
-                        notebooks: data,
-                        previewsName
+                        notebooks:data
                     });
                 }
             });
@@ -161,7 +165,7 @@ export default class Frame extends React.Component{
 
     render(){
 
-        let {signInAjax, signUpAjax, clearLoginMsg, logOut, initMyPage} = this;
+        let {signInAjax, signUpAjax, clearLoginMsg, logOut, initMyPage,getPreview,changePreviews} = this;
 
         let {myInfo, signInMsg , signUpMsg, hasLoginReq, myPagePreviews, notebooks, previewsName} = this.state;
 
@@ -231,7 +235,8 @@ export default class Frame extends React.Component{
                                 {...{
                                     myPagePreviews,
                                     previewsName,
-                                    notebooks
+                                    notebooks,
+                                    changePreviews
                                 }}
                                 {...props}
                             />
