@@ -36,22 +36,20 @@ export default class Frame extends React.Component{
     }
 
     initMyInfo(myInfo){
-
-        let {id, avatar, username, user_intro} = myInfo;
-
         if(myInfo){
-
+            let {id, avatar, username, user_intro} = myInfo;
             avatar = cfg.url + avatar;
+
+            myInfo = {
+                user_id: id,
+                avatar,
+                user_name: username,
+                user_intro
+            }
         }
 
 
-        this.setState({myInfo:{
-            user_id: id,
-            avatar,
-            user_name: username,
-            user_intro
-
-        }});
+        this.setState({myInfo});
     }
 
     clearLoginMsg(){

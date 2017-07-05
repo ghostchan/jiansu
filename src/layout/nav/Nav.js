@@ -9,11 +9,12 @@ let propTypes = {
 
 export default function Nav(props){
 
-    let {myInfo, myInfo:{user_id},logOut, initMyPage, history} = props;
+    let {myInfo, logOut, initMyPage, history} = props;
     // console.log(myInfo);
     let userLink = null;
 
     if(myInfo){
+        let {user_id} = myInfo;
         userLink = (
             <NavLink
                 to="/my_page"
